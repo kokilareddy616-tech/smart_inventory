@@ -12,14 +12,18 @@ CORS(app)
 @app.route("/")
 def home():
     return render_template("index.html") # Enable it for the whole app
+import os
+import os
+import mysql.connector
 
 DB_CONFIG = {
-    "host":     "localhost",
-    "user":     "root",
-    "password": "k123",   # ← change this
-    "database": "smart_inventory"
+    "host": os.environ.get("MYSQLHOST"),
+    "user": os.environ.get("MYSQLUSER"),
+    "password": os.environ.get("MYSQLPASSWORD"),
+    "database": os.environ.get("MYSQLDATABASE"),
+    "port": int(os.environ.get("MYSQLPORT", 3306)),
+    "ssl_ca": "/path/to/ca.pem"   # IMPORTANT for Aiven
 }
-
 def get_connection():
     """Open a fresh DB connection per request."""
     return mysql.connector.connect(**DB_CONFIG)
